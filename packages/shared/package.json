@@ -1,0 +1,22 @@
+{
+  "name": "@sealdesk/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schemas": "./src/schemas.ts",
+    "./errors": "./src/errors.ts",
+    "./bytes": "./src/bytes.ts",
+    "./abi": "./src/abi.ts",
+    "./ports": "./src/ports.ts"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.ts"
+  },
+  "dependencies": {
+    "pino": "^10.4.0",
+    "viem": "^2.58.0",
+    "zod": "^4.6.7"
+  }
+}

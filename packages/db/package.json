@@ -1,0 +1,24 @@
+{
+  "name": "@sealdesk/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate": "drizzle-kit generate",
+    "generate:custom": "drizzle-kit generate --custom",
+    "migrate": "node src/cli-migrate.ts",
+    "test": "node --test test/*.test.ts"
+  },
+  "dependencies": {
+    "drizzle-orm": "0.45.4",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.16",
+    "@types/pg": "^8.23.1",
+    "drizzle-kit": "0.31.11"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  // Node >= 24 runs TypeScript directly (type stripping), so nothing is emitted:
+  // tsc is only the type checker. Only erasable syntax is allowed (no enums/namespaces).
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "types": ["node"]
+  },
+  "include": ["packages/*/src", "packages/*/test", "packages/*/*.ts", "apps/*/src", "apps/*/test", "apps/e2e/scripts", "scripts"]
+}

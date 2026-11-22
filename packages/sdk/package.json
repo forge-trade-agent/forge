@@ -1,0 +1,22 @@
+{
+  "name": "@sealdesk/sdk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "JavaScript SDK for Sealdesk: sealed private block trades, both sides, browser and Node.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@sealdesk/crypto": "0.1.0",
+    "@sealdesk/shared": "0.1.0",
+    "viem": "^2.58.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

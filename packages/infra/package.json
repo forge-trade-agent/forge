@@ -1,0 +1,15 @@
+{
+  "name": "@sealdesk/infra",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Adapters for the ports in @sealdesk/shared: Redis, viem, and in-memory twins.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@sealdesk/shared": "0.1.0",
+    "ioredis": "^6.0.0",
+    "viem": "^2.58.0"
+  }
+}

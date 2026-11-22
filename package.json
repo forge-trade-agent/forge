@@ -1,0 +1,37 @@
+{
+  "name": "sealdesk",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "workspaces": [
+    "packages/shared",
+    "packages/crypto",
+    "packages/infra",
+    "packages/sdk",
+    "packages/mcp",
+    "packages/db",
+    "apps/api",
+    "apps/indexer",
+    "apps/relayer",
+    "apps/worker",
+    "apps/e2e",
+    "apps/web"
+  ],
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run test --workspaces --if-present",
+    "db:generate": "npm run generate -w @sealdesk/db",
+    "db:migrate": "npm run migrate -w @sealdesk/db",
+    "dev:api": "npm run dev -w @sealdesk/api",
+    "contracts:test": "cd contracts && forge test",
+    "dev:web": "npm run dev -w @sealdesk/web",
+    "dev:stack": "node apps/e2e/scripts/dev-stack.ts",
+    "markets:sync": "node scripts/sync-markets.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "5.9.3"
+  }
+}

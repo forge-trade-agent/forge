@@ -1,0 +1,26 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+coverage/
+.turbo/
+dist/
+.next/
+.next-build/
+.dev-admin-token
+
+# local-only / generated
+.taste-skill/
+PROMPT_private_otc_desk.md
+contracts/cache/
+contracts/out/
+contracts/node_modules/
+contracts/broadcast/
+deploy/lite/dist/
+deploy/.env.prod
+.next-lite/
+brand/launch/
+brand/X-PROFILE.md
+*.pem
+*.key

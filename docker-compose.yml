@@ -1,0 +1,103 @@
+name: sealdesk
+
+x-node-service: &node-service
+  build: &build
+    context: .
+    dockerfile: Dockerfile
+  env_file: .env
+  environment:
+    DATABASE_URL: postgres://sealdesk:sealdesk@postgres:5432/sealdesk
+    REDIS_URL: redis://redis:6379
+  restart: unless-stopped
+  depends_on:
+    migrate:
+      condition: service_completed_successfully
+    redis:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: timescale/timescaledb:2.17.2-pg16
+    environment:
+      POSTGRES_USER: sealdesk
+      POSTGRES_PASSWORD: sealdesk
+      POSTGRES_DB: sealdesk
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sealdesk -d sealdesk"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
+    ports: ["6379:6379"]
+    volumes: [redisdata:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Local chain: a fork of Robinhood Chain (set FORK_RPC_URL) or a blank anvil chain.
+  anvil:
+    image: ghcr.io/foundry-rs/foundry:v1.9.0
+    entrypoint: ["sh", "-c"]
+    command:
+      - >-
+        if [ -n "$$FORK_RPC_URL" ]; then
+        anvil --host 0.0.0.0 --chain-id 4663 --fork-url "$$FORK_RPC_URL";
+        else anvil --host 0.0.0.0 --chain-id 4663; fi
+    environment:
+      FORK_RPC_URL: ${FORK_RPC_URL:-}
+    ports: ["8545:8545"]
+    profiles: ["local-chain"]
+
+  migrate:
+    build:
+      <<: *build
+      args: { APP: api }
+    working_dir: /repo/packages/db
+    command: ["node", "src/cli-migrate.ts"]
+    environment:
+      DATABASE_URL: postgres://sealdesk:sealdesk@postgres:5432/sealdesk
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  api:
+    <<: *node-service
+    build:
+      <<: *build
+      args: { APP: api }
+    ports: ["8080:8080"]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+
+  indexer:
+    <<: *node-service
+    build:
+      <<: *build
+      args: { APP: indexer }
+
+  relayer:
+    <<: *node-service
+    build:
+      <<: *build
+      args: { APP: relayer }
+
+  worker:
+    <<: *node-service
+    build:
+      <<: *build
+      args: { APP: worker }
+
+volumes:
+  pgdata:
+  redisdata:
