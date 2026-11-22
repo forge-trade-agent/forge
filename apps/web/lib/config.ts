@@ -4,8 +4,9 @@ export const BRAND = {
   name: "Forge",
   token: "FORGE",
   tagline: "Private OTC block trades",
-  x: "https://x.com/",
-  github: "https://github.com/",
+  x: "https://x.com/forge_trade",
+  xHandle: "@forge_trade",
+  github: "https://github.com/forge-trade-agent/forge",
 } as const;
 
 /** Pre-launch: the site is up before the contracts are deployed. Trading pages show a "soon" card. */

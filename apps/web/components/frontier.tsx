@@ -5,13 +5,14 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { RfqPublic } from "@sealdesk/sdk";
 import { api } from "@/lib/desk";
-import { CHAIN_ID, CHAIN_NAME } from "@/lib/config";
+import { BRAND, CHAIN_ID, CHAIN_NAME } from "@/lib/config";
 import { fmtUnits, timeLeft } from "@/lib/format";
 import { loadMarkets, useNow, useStream, type MarketItem } from "@/lib/hooks";
 import { HeroField } from "./HeroField";
 import { prefersReduced, SplitText } from "./motion";
 import { SoundChip } from "./sound";
-import { Countdown } from "./ui";
+import { Copy, Countdown } from "./ui";
+import { shortCa, useSiteCa } from "./SiteCa";
 import { useTokenPair } from "./desk";
 
 /** Live desk feed for the hero: newest open block + counts, refreshed by the SSE desk channel. */
@@ -84,6 +85,26 @@ function CountUp({ value }: { value: number }) {
   return <span ref={ref} className="num">0</span>;
 }
 
+/** The $FORGE contract address, shown only here (posted from /admin). */
+function HeroCa() {
+  const { ca, loading } = useSiteCa();
+  return (
+    <div className="hx-ca hx-in">
+      <span className="hx-ca-k">${BRAND.token} CA</span>
+      {ca ? (
+        <>
+          <span className="num hx-ca-full">{ca.address}</span>
+          <span className="num hx-ca-short">{shortCa(ca.address, 4)}</span>
+          <Copy text={ca.address} label="Copy token address" />
+          {ca.link && <a href={ca.link} target="_blank" rel="noreferrer noopener" className="link">Chart ↗</a>}
+        </>
+      ) : (
+        <span className="dim">{loading ? "…" : <>Coming soon · announced on <a href={BRAND.x} target="_blank" rel="noreferrer noopener" className="link">X {BRAND.xHandle}</a></>}</span>
+      )}
+    </div>
+  );
+}
+
 export function FrontierHero() {
   const { rfqs, counts, markets } = useDeskPulse();
   const root = useRef<HTMLElement>(null);
@@ -125,6 +146,7 @@ export function FrontierHero() {
           <Link href="/app?new=buy" className="btn btn-buy btn-lg">Post a block</Link>
           <Link href="/how" className="btn btn-lg btn-ghost">How it works</Link>
         </div>
+        <HeroCa />
 
         <div className="hx-ticket">
           <Link data-ui href={newest ? `/rfq/${newest.id}` : "/app?new=buy"} className="tk" aria-label={newest ? "Open the latest sealed block" : "Post the first block"}>

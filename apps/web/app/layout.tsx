@@ -1,7 +1,7 @@
 import { PrelaunchGate } from "@/components/Prelaunch";
 import type { Metadata, Viewport } from "next";
 import { Archivo, Geist } from "next/font/google";
-import { AnnouncementBar, Footer, Header } from "@/components/chrome";
+import { Footer, Header } from "@/components/chrome";
 import { MotionRoot } from "@/components/motion";
 import { SoundProvider } from "@/components/sound";
 import { WalletProvider } from "@/lib/wallet";
@@ -32,7 +32,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WalletProvider>
           <SoundProvider>
             <MotionRoot>
-              <AnnouncementBar />
               <Header />
               <main><PrelaunchGate>{children}</PrelaunchGate></main>
               <Footer />

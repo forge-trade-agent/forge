@@ -11,7 +11,6 @@ import { getBurn } from "@/lib/stats";
 import { useWallet } from "@/lib/wallet";
 import { useHealth } from "./chrome";
 import { Copy, Segmented, TokenAvatar } from "./ui";
-import { shortCa, useSiteCa } from "./SiteCa";
 
 // ---------------------------------------------------------------- hero mosaic
 
@@ -342,7 +341,6 @@ export function WalletChecker() {
 
 export function TokenStrip() {
   const { data: health } = useHealth();
-  const { ca } = useSiteCa();
   const { data: m } = useAsync(
     () => (health ? import("@/lib/desk").then(({ api }) => api.tokenMarket(health.contracts.platformToken)).catch(() => null) : Promise.resolve(null)),
     [health],
@@ -350,7 +348,6 @@ export function TokenStrip() {
   const mm = m as (null | { priceUsd: string; marketCapUsd: string | null; liquidityUsd: string | null; change24hPct?: string | null });
   return (
     <div className="panel panel-pad row" style={{ flexWrap: "wrap", ["--g" as string]: "28px" }}>
-      <div><span className="label">${BRAND.token}</span>{ca ? <div className="addr">{shortCa(ca.address, 5)} <Copy text={ca.address} /></div> : <div className="dim">CA coming soon</div>}</div>
       <div><div className="label">Price</div><div className="num">{mm ? fmtUsd(mm.priceUsd, 8) : "–"}</div></div>
       <div><div className="label">Mcap</div><div className="num">{mm ? fmtUsd(mm.marketCapUsd) : "–"}</div></div>
       <div><div className="label">Liquidity</div><div className="num">{mm ? fmtUsd(mm.liquidityUsd) : "–"}</div></div>

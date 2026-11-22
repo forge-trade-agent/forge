@@ -11,8 +11,7 @@ import { HEADER, SITEMAP, type SiteGroup } from "@/lib/sitemap";
 import { useWallet } from "@/lib/wallet";
 import { prefersReduced, useScrub } from "./motion";
 import { SoundChip } from "./sound";
-import { AddressPill, Copy } from "./ui";
-import { shortCa, useSiteCa } from "./SiteCa";
+import { AddressPill } from "./ui";
 import { ForgeMark } from "./BrandMark";
 
 const isHere = (path: string, href: string) => path === href || path.startsWith(`${href}/`);
@@ -60,31 +59,6 @@ function NavGroup({ group, n, path }: { group: SiteGroup; n: number; path: strin
 
 export function useHealth() {
   return useAsync(() => api.health(), []);
-}
-
-export function AnnouncementBar() {
-  const { ca, loading } = useSiteCa();
-  return (
-    <div className="announce">
-      <div className="wrap">
-        <span style={{ color: "var(--accent)" }}>${BRAND.token}</span>
-        <span className="dim">CA</span>
-        {ca ? (
-          <>
-            <span className="num ca-full">{ca.address}</span>
-            <span className="num ca-short">{shortCa(ca.address, 4)}</span>
-            <Copy text={ca.address} label="Copy token address" />
-            {ca.link && <a href={ca.link} target="_blank" rel="noreferrer noopener" className="link hide-sm">Chart ↗</a>}
-          </>
-        ) : (
-          <span className="dim">{loading ? "…" : "Coming soon"}</span>
-        )}
-        <Link href="/stats" className="link">
-          Burn tracker →
-        </Link>
-      </div>
-    </div>
-  );
 }
 
 export function ConnectButton({ compact }: { compact?: boolean }) {
@@ -166,6 +140,9 @@ export function Header() {
             )}
           </nav>
           <div className="row hide-sm">
+            <a className="iconbtn" href={BRAND.x} target="_blank" rel="noreferrer noopener" aria-label="Forge on X">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.9L18.9 2zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3z"/></svg>
+            </a>
             <a className="iconbtn" href={BRAND.github} target="_blank" rel="noreferrer noopener" aria-label="Source code">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden><path d="M8 0a8 8 0 00-2.53 15.59c.4.07.55-.17.55-.38v-1.34c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.34.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.6 7.6 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 008 0z"/></svg>
             </a>
@@ -228,7 +205,6 @@ function FooterWord() {
 
 export function Footer() {
   const { data } = useHealth();
-  const { ca } = useSiteCa();
   return (
     <footer className="footer">
       <FooterWord />
@@ -248,14 +224,11 @@ export function Footer() {
           <Link href="/developers#mcp">MCP server</Link>
           <a href={`${API_URL}/sdk/forge.mjs`}>SDK</a>
           <a href={`${API_URL}/openapi.json`}>OpenAPI</a>
-          <a href={BRAND.github} target="_blank" rel="noreferrer noopener">Source code</a>
+          <a href={BRAND.github} target="_blank" rel="noreferrer noopener">GitHub</a>
+          <a href={BRAND.x} target="_blank" rel="noreferrer noopener">X {BRAND.xHandle}</a>
         </div>
       </nav>
       <div className="wrap grid">
-        <div className="stack" style={{ ["--g" as string]: "6px" }}>
-          <div className="label">${BRAND.token} token{ca?.network ? ` (${ca.network})` : ""}</div>
-          {ca ? <span className="addr num">{shortCa(ca.address, 8)} <Copy text={ca.address} label="Copy token address" /></span> : <span className="dim">CA coming soon</span>}
-        </div>
         <div className="stack" style={{ ["--g" as string]: "6px" }}>
           <div className="label">Settlement contract (OtcEscrow)</div>
           {data && <AddressPill address={data.contracts.escrow} n={8} />}

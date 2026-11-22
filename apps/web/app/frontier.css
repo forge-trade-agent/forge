@@ -199,6 +199,10 @@ html.lenis, html.lenis body { height: auto; }
 .hx-title .split .w { padding-bottom: 0.05em; }
 .hx-sub { margin: 0; max-width: 520px; font-size: 16px; line-height: 1.6; color: var(--muted); }
 .hx-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.hx-ca { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 100%; padding: 8px 10px 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.03); font-size: 13px; }
+.hx-ca-k { color: var(--accent); font-family: var(--font-mono, ui-monospace, monospace); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+.hx-ca-short { display: none; }
+@media (max-width: 640px) { .hx-ca { border-radius: 18px; } .hx-ca-full { display: none; } .hx-ca-short { display: inline; } }
 
 .hx-ticket { width: min(880px, 100%); margin-top: clamp(16px, 4vh, 40px); display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .tk {
